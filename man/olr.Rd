@@ -9,26 +9,27 @@
 \alias{r2list}
 \title{olr: Optimal Linear Regression}
 \usage{
-olr(datasetname, resvarname, expvarnames, adjr2 = TRUE)
+olr(dataset, responseName = NULL, predictorNames = NULL,
+  adjr2 = TRUE)
 
-olrmodels(datasetname, resvarname, expvarnames)
+olrmodels(dataset, responseName = NULL, predictorNames = NULL)
 
-olrformulas(datasetname, resvarname, expvarnames)
+olrformulas(dataset, responseName = NULL, predictorNames = NULL)
 
-olrformulaorder(datasetname, resvarname, expvarnames)
+olrformulaorder(dataset, responseName = NULL, predictorNames = NULL)
 
-adjr2list(datasetname, resvarname, expvarnames)
+adjr2list(dataset, responseName = NULL, predictorNames = NULL)
 
-r2list(datasetname, resvarname, expvarnames)
+r2list(dataset, responseName = NULL, predictorNames = NULL)
 }
 \arguments{
-\item{datasetname}{is defined by the user and points to the name of the dataset that is being used.}
+\item{dataset}{is defined by the user and points to the name of the dataset that is being used.}
 
-\item{resvarname}{the response variable name defined as a string. For example. It represents a header in the data table.}
+\item{responseName}{the response variable name defined as a string. For example, it represents a header in the data table.}
 
-\item{expvarnames}{is a variable that you must define as a list before your function. Place desired headers from the data table in here as a list.}
+\item{predictorNames}{the predictor variable or variables that are the terms that are to be regressed against the \code{responseName}. Place desired headers from the \code{dataset} in here as a character vector.}
 
-\item{adjr2}{\code{adjr2 = TRUE} means you want to return the regression summary for the maximum adjusted R-squared term. \code{adjr2 = FALSE} means you want to return the regression summary for the maximum R-squared term.}
+\item{adjr2}{\code{adjr2 = TRUE} returns the regression summary for the maximum adjusted R-squared term. \code{adjr2 = FALSE} returns the regression summary for the maximum R-squared term.}
 }
 \value{
 The regression summary for the adjusted R-squared or the R-squared, specified with \code{TRUE} or \code{FALSE} in the olr().
@@ -36,16 +37,21 @@ The regression summary for the adjusted R-squared or the R-squared, specified wi
 \description{
 The main olr() runs all of the possible linear regression equation combinations, which are all of the
 combinations of dependent variables respect to the independent variable. In essence, the olr()
-returns the best fit linear regression model. The user can prompt the olr() to either return the
-best fit statistical summary of either the greatest adjusted R-squared or R-squared term.
+returns the best fit linear regression model. The user can prompt the olr() to return either the
+best fit statistical summary of either the greatest adjusted R-squared, or the greatest R-squared term.
+R-squared increases with the addition of an explanatory variable whether it is 'significant' or not,
+thus this was developed to eliminate that conundrum. Adjusted R-squared is preferred to overcome this
+phenomenon, but each combination will still produce different results and this will return the best one.
 }
 \details{
-Complimentary functions below follow the format: function(datasetname, resvarname, expvarnames) \cr \cr
-olrmodels: returns the list of models accompanied by the coefficients. After typing in \code{olrmodels(datasetname, resvarname, expvarnames)} type the desired summary number to the right of the comma in the brackets: \code{[,x]} where x equals the desired summary number. For example, \code{olrmodels(datasetname, resvarname, expvarnames)[,8]} \cr \cr
-olrformulas: returns the list of olr() formulas \cr \cr
-olrformulasorder: returns the formulas with the predictors (dependent variables) in ascending order \cr \cr
-adjr2list: list of the adjusted R-squared terms \cr \cr
-r2list: list of the R-squared terms \cr \cr
+Complimentary functions below follow the format: function(dataset, responseName = NULL, predictorNames = NULL) \cr \cr
+\strong{olrmodels:} returns the list of models accompanied by the coefficients. After typing in \code{olrmodels(dataset, responseName, predictorNames)} type the desired summary number to the right of the comma in the brackets: \code{[,x]} where x equals the desired summary number. For example, \code{olrmodels(dataset, responseName, predictorNames)[,8]} \cr \cr
+\strong{olrformulas:} returns the list of olr() formulas \cr \cr
+\strong{olrformulasorder:} returns the formulas with the predictors (dependent variables) in ascending order \cr \cr
+\strong{adjr2list:} list of the adjusted R-squared terms \cr \cr
+\strong{r2list:} list of the R-squared terms \cr \cr
+
+When \code{responseName} and \code{predictorNames} are \code{NULL}, then the first column in the \code{dataset} is set as the \code{responseName} and the remaining columns are the \code{predictorNames}.
 
 \emph{A 'Python' version is available at} <https://pypi.org/project/olr>.
 }
@@ -53,11 +59,11 @@ r2list: list of the R-squared terms \cr \cr
 file <- system.file("extdata", "oildata.csv", package = "olr", mustWork = TRUE)
 oildata <- read.csv(file, header = TRUE)
 
-datasetname <- oildata
-resvarname <- 'OilPrices'
-expvarnames <- c('SP500', 'RigCount', 'API', 'Field_Production', 'RefinerNetInput', 'Imports')
+dataset <- oildata
+responseName <- 'OilPrices'
+predictorNames <- c('SP500', 'RigCount', 'API', 'Field_Production', 'OperableCapacity', 'Imports')
 
-olr(datasetname, resvarname, expvarnames, adjr2 = TRUE)
+olr(dataset, responseName, predictorNames, adjr2 = TRUE)
 
 }
 \keyword{olr}
